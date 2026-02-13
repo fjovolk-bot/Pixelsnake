@@ -103,8 +103,9 @@
     return x >= 1 && x < GRID_SIZE - 1 && y >= 1 && y < GRID_SIZE - 1;
   }
 
-  function snakeOccupies(x, y) {
-    return game.snake.some((segment) => segment.x === x && segment.y === y);
+  function snakeOccupies(x, y, ignoreTail = false) {
+    const segments = ignoreTail ? game.snake.slice(0, -1) : game.snake;
+    return segments.some((segment) => segment.x === x && segment.y === y);
   }
 
   function rollFreeCell() {
@@ -189,12 +190,16 @@
 
   function startGame() {
     resetGame();
+    game.accumulator = 0;
+    game.lastTick = 0;
     game.state = STATE.RUNNING;
   }
 
   function backToMenu() {
     game.state = STATE.MENU;
     game.inputQueue = [];
+    game.accumulator = 0;
+    game.lastTick = 0;
   }
 
   function recomputeSpeed() {
@@ -245,14 +250,15 @@
       return;
     }
 
-    if (snakeOccupies(nx, ny)) {
+    const isGrowing = Boolean(game.food && game.food.x === nx && game.food.y === ny);
+    if (snakeOccupies(nx, ny, !isGrowing)) {
       gameOver();
       return;
     }
 
     game.snake.unshift({ x: nx, y: ny });
 
-    if (game.food && game.food.x === nx && game.food.y === ny) {
+    if (isGrowing) {
       handleFood(now);
     } else {
       game.snake.pop();
@@ -440,7 +446,9 @@
     const { key } = event;
 
     if (key in DIR) {
-      game.inputQueue.push(key);
+      if (game.inputQueue.length < 3) {
+        game.inputQueue.push(key);
+      }
       event.preventDefault();
       return;
     }
@@ -458,6 +466,7 @@
         game.state = STATE.PAUSED;
       } else if (game.state === STATE.PAUSED) {
         game.state = STATE.RUNNING;
+        game.lastTick = performance.now();
       }
       return;
     }
