@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="de">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Pixel Snake</title>
+    <link rel="stylesheet" href="./style.css" />
+  </head>
+  <body>
+    <main class="app-shell">
+      <header class="hud">
+        <div class="hud-item">Score: <span id="score">0</span></div>
+        <div class="hud-item">Highscore: <span id="highscore">0</span></div>
+        <div class="hud-item">Level: <span id="level">1</span></div>
+        <div class="hud-item">Speed: <span id="speed">6.0</span> tps</div>
+        <div class="hud-item">Mode: <span id="mode">Classic</span></div>
+      </header>
+
+      <section class="canvas-wrap">
+        <canvas id="game" width="640" height="640" aria-label="Pixel Snake Spielfeld"></canvas>
+      </section>
+
+      <footer class="statusbar">
+        <span id="effectStatus">Effekt: keiner</span>
+      </footer>
+    </main>
+
+    <script src="./game.js"></script>
+  </body>
+</html>
