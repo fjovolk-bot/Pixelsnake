@@ -3,7 +3,7 @@ name: Build Windows Installer
 on:
   workflow_dispatch:
   push:
-    branches: [ "main" ]
+    branches: ["main"]
 
 jobs:
   build:
@@ -21,8 +21,8 @@ jobs:
       - name: Install dependencies
         run: npm install
 
-     - name: Build installer (no publish)
-  run: npx electron-builder --win --publish never
+      - name: Build installer (no publish)
+        run: npx electron-builder --win --publish never
 
       - name: Upload installer artifact
         uses: actions/upload-artifact@v4
